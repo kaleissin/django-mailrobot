@@ -9,19 +9,37 @@ def _render_from_string(templatestring, context=None):
     template = Template(templatestring)
     return template.render(Context(context))
 
+class NameManager(models.Manager):
+    def get_by_natural_key(self, name):
+        return self.get(name=name)
+
 class AbstractNamedModel(models.Model):
     name = models.SlugField(max_length=40, unique=True)
 
+    objects = NameManager()
+
     class Meta:
         abstract = True
+
+    def natural_key(self):
+        return self.name
+
+class AddressManager(models.Manager):
+    def get_by_natural_key(self, address):
+        return self.get(address=address)
 
 class Address(models.Model):
     address = models.EmailField(unique=True)
     comment = models.CharField(max_length=66, blank=True, null=True)
 
+    objects = AddressManager()
+
     def __unicode__(self):
         if self.comment:
             return u'%s <%s>' % (self.comment, self.address)
+        return self.address
+
+    def natural_key(self):
         return self.address
 
 class Signature(AbstractNamedModel):
