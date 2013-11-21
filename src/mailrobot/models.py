@@ -90,7 +90,7 @@ class Mail(AbstractNamedModel):
         body = _render_from_string(self.content.body, context)
         if self.signature:
             signature = _render_from_string(self.signature.sig, context)
-            return "%s\n-- \n%s" % (body, signature)
+            return "%s\n\n\n-- \n%s" % (body, signature)
         return body
 
     def make_subject(self, context=None):
