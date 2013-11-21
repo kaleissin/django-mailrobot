@@ -101,12 +101,16 @@ class Mail(AbstractNamedModel):
             return self.reply_to.address
         return u''
 
-    def _get_addresses(self, attribute, additional=()):
+    def _get_addresses(self, attribute, additional=(), required=False):
+        """Merge the addresses of field <attribute> with list in <additional>"""
+
         attribute = getattr(self, attribute)
         addresses = ()
         if attribute:
             addresses = set([row[0] for row in attribute.values('address')])
             addresses = addresses | set(additional)
+        if required and not addresses:
+            raise ValueError, 'No addresses!'
         return addresses
 
     def _get_pp_addresses(self, attribute):
@@ -116,7 +120,7 @@ class Mail(AbstractNamedModel):
         return ()
 
     def get_recipients(self, additional=()):
-        return self._get_addresses('recipients', additional)
+        return self._get_addresses('recipients', additional, required=True)
 
     def get_ccs(self, additional=()):
         return self._get_addresses('ccs', additional)
