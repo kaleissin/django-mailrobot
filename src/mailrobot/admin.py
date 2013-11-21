@@ -2,6 +2,11 @@ from django.contrib import admin
 
 from .models import Address, Signature, Mail, MailBody
 
+def clone_mail(modeladmin, request, queryset):
+    for model in queryset.all():
+        model.clone()
+clone_mail.short_description = 'Clone selected mails'
+
 class AddressInline(admin.TabularInline):                                   
     model = Address                                                         
     extra = 1
@@ -15,6 +20,7 @@ class SignatureAdmin(admin.ModelAdmin):
 
 class MailAdmin(admin.ModelAdmin):
     list_display = ('name', 'subject', 'sender')
+    actions = [clone_mail]
 
 class MailBodyAdmin(admin.ModelAdmin):
     list_display = ('name', 'subject')

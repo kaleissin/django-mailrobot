@@ -1,3 +1,6 @@
+import time
+from copy import deepcopy
+
 from django.db import models
 from django.template import Context, Template
 from django.core.mail import EmailMessage
@@ -14,7 +17,8 @@ class NameManager(models.Manager):
         return self.get(name=name)
 
 class AbstractNamedModel(models.Model):
-    name = models.SlugField(max_length=40, unique=True)
+    NAME_MAX_LENGTH = 40
+    name = models.SlugField(max_length=NAME_MAX_LENGTH, unique=True)
 
     objects = NameManager()
 
@@ -77,6 +81,16 @@ class Mail(AbstractNamedModel):
 
     def __unicode__(self):
         return self.subject
+
+    def clone(self):
+        newself = deepcopy(self)
+        newself.pk = None
+        newself.name = '%s-%.0f' % (self.name, time.time())
+        newself.save(force_insert=True)
+        newself.recipients = self.recipients.all()
+        newself.ccs = self.ccs.all()
+        newself.bccs = self.bccs.all()
+        return newself
 
     @property
     def subject(self):
