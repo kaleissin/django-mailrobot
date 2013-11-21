@@ -34,6 +34,9 @@ class Address(models.Model):
 
     objects = AddressManager()
 
+    class Meta:
+        verbose_name_plural = 'addresses'
+
     def __unicode__(self):
         if self.comment:
             return u'%s <%s>' % (self.comment, self.address)
@@ -51,6 +54,9 @@ class Signature(AbstractNamedModel):
 class MailBody(AbstractNamedModel):
     subject = models.CharField(max_length=66, unique=True)
     body = models.TextField()
+
+    class Meta:
+        verbose_name_plural = 'mailbodies'
 
     def __unicode__(self):
         return self.subject

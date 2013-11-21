@@ -6,6 +6,9 @@ class AddressInline(admin.TabularInline):
     model = Address                                                         
     extra = 1
 
+class AddressAdmin(admin.ModelAdmin):
+    list_display = ('address', 'comment')
+
 class SignatureAdmin(admin.ModelAdmin):
     list_display = ('name',)
     prepopulated_fields = {'name': ('sig',)}
@@ -17,7 +20,7 @@ class MailBodyAdmin(admin.ModelAdmin):
     list_display = ('name', 'subject')
     prepopulated_fields = {'name': ('subject',)}
 
-admin.site.register(Address)
+admin.site.register(Address, AddressAdmin)
 admin.site.register(Signature, SignatureAdmin)
 admin.site.register(Mail, MailAdmin)
 admin.site.register(MailBody, MailBodyAdmin)
