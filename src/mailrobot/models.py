@@ -107,17 +107,11 @@ class Mail(AbstractNamedModel):
         attribute = getattr(self, attribute)
         addresses = ()
         if attribute:
-            addresses = set([row[0] for row in attribute.values('address')])
+            addresses = set([unicode(row) for row in attribute.all()])
             addresses = addresses | set(additional)
         if required and not addresses:
             raise ValueError, 'No addresses!'
         return addresses
-
-    def _get_pp_addresses(self, attribute):
-        attribute = getattr(self, attribute)
-        if attribute:
-            return [unicode(row) for row in attribute.all()]
-        return ()
 
     def get_recipients(self, additional=()):
         return self._get_addresses('recipients', additional, required=True)
