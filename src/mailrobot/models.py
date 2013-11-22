@@ -72,7 +72,7 @@ class Mail(AbstractNamedModel):
     }
 
     content = models.ForeignKey(MailBody, on_delete=models.CASCADE, related_name='mail')
-    signature = models.ForeignKey(Signature, null=True, related_name='mail')
+    signature = models.ForeignKey(Signature, related_name='mail', **KEYFIELD_DEFAULTS)
     sender = models.ForeignKey(Address, related_name='sender', **KEYFIELD_DEFAULTS)
     recipients = models.ManyToManyField(Address, related_name='recipients', **KEYFIELD_DEFAULTS)
     ccs = models.ManyToManyField(Address, related_name='cc', **KEYFIELD_DEFAULTS)
