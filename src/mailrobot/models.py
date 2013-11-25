@@ -59,12 +59,19 @@ class Address(models.Model):
         return self.address
 
 class Signature(AbstractNamedModel):
+    """Email signature
+
+    No validation as to size.
+    """
+
     sig = models.TextField()
 
     def __unicode__(self):
         return self.name
 
 class MailBody(AbstractNamedModel):
+    "Subject and bodytext of the email"
+
     subject = models.CharField(max_length=66, unique=True)
     body = models.TextField()
 
@@ -75,6 +82,11 @@ class MailBody(AbstractNamedModel):
         return self.subject
 
 class Mail(AbstractNamedModel):
+    """Canned Mail with default sender, Reply-To and recipients
+
+    Verifies that there is a sender and at least one recipient.
+    """
+
     KEYFIELD_DEFAULTS = {
         'null': True,
         'blank': True,
@@ -96,6 +108,7 @@ class Mail(AbstractNamedModel):
 
         Use this to send the same MailBody to several sets of recipients.
         """
+
         newself = super(Mail, self).clone()
         newself.recipients = self.recipients.all()
         newself.ccs = self.ccs.all()
@@ -111,24 +124,45 @@ class Mail(AbstractNamedModel):
         return self.content.body
 
     def attach_signature(self, context=None):
+        """
+        Signature is attached so:
+
+        ::
+
+                the final line of content
+
+
+                --
+                signature
+
+        """
+
         if self.signature:
             signature = _render_from_string(self.signature.sig, context)
             return u'\n\n\n-- \n%s' % signature
         return u''
 
     def make_content(self, context=None):
+        "Generate the content (body + signature) from django templates and context"
+
         body = _render_from_string(self.content.body, context)
         return body + self.attach_signature()
 
     def make_subject(self, context=None):
+        "Generate the subject from a django template and context"
+
         return _render_from_string(self.content.subject, context)
 
     def get_reply_to(self, reply_to=u''):
+        "Reply-To may be empty"
+
         if not reply_to and self.reply_to:
             return unicode(self.reply_to)
         return reply_to
 
     def get_sender(self, sender=None):
+        "Sender may not be empty"
+
         if not sender:
             if self.sender:
                 return unicode(self.sender)
@@ -137,7 +171,7 @@ class Mail(AbstractNamedModel):
         raise ValueError, "Mail must have a sender"
 
     def _get_addresses(self, attribute, additional=(), required=False):
-        """Merge the addresses of field <attribute> with list in <additional>"""
+        "Merge the addresses of field <attribute> with list in <additional>"
 
         attribute = getattr(self, attribute)
         addresses = ()
@@ -158,6 +192,14 @@ class Mail(AbstractNamedModel):
         return self._get_addresses('bccs', additional)
 
     def make_message(self, sender=None, recipients=(), ccs=(), bccs=(), reply_to=None, headers=None, context=None):
+        """Generate a django.core.mail.EmailMessage
+
+        **sender** and **reply_to** may be overridden.
+        **recipients**, **ccs** and **bccs** may be supplemented.
+
+        Verfies that there is a sender and at least one recipient.
+        """
+
         if not headers:
             headers = {}
         sender = self.get_sender(sender)
@@ -174,8 +216,8 @@ class Mail(AbstractNamedModel):
         message = EmailMessage(
             subject=subject,
             body=content,
-            from_email=sender, 
-            to=recipients, 
+            from_email=sender,
+            to=recipients,
             cc=ccs,
             bcc=bccs,
             headers=headers
@@ -183,5 +225,7 @@ class Mail(AbstractNamedModel):
         return message
 
     def send(self, **kwargs):
+        "Use django's email backend system to send the Mail"
+
         message = self.make_message(**kwargs)
         message.send()
