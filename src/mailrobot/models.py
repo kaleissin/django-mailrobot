@@ -80,9 +80,7 @@ class Signature(AbstractNamedModel):
 
     def attach(self, context=None):
         """
-        Signature is attached so:
-
-        ::
+        Signature is attached so::
 
                 the final line of content
 
@@ -93,7 +91,9 @@ class Signature(AbstractNamedModel):
         """
 
         signature = _render_from_string(self.sig, context)
-        return u'\n\n\n-- \n%s' % signature
+        if signature:
+            return u'\r\n\r\n\r\n-- \r\n%s' % signature
+        return u''
 
 class MailBody(AbstractNamedModel):
     "Subject and bodytext of the email"
