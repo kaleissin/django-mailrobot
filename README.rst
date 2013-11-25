@@ -10,15 +10,15 @@ spread all throughout your code? Hardcode no more! Use mailrobot instead.
 Installation
 ============
 
-1. Install library, for instance with pip::
+1. Install the library, for instance with pip::
 
     pip install django-mailrobot
 
-2. Add library to your INSTALLED_APPS in your settings::
+2. Add the library to your INSTALLED_APPS of an exiting project::
 
     INSTALLED_APPS += ['mailrobot']
 
-3. Add the tables.
+3. Add the tables to the existing project.
 
    Prior to django 1.7::
 
@@ -28,6 +28,29 @@ Installation
 
         $ ./manage.py schemamigration --initial mailrobot
         $ ./manage.py migrate mailrobot
+
+Demo
+====
+
+Copy the entire django-mailrobot directory somewhere, set up and enter a
+virtualenv, then provided you are on some Un*x::
+
+    make demo
+
+This'll ask you to make an admin user. Do so.
+
+The demo should now be running on http://127.0.0.1/
+
+Tests
+=====
+
+To run the tests, first install the testing-requirements::
+
+    pip install -r requirements/test.txt
+
+then run the tests with::
+
+    make test APP=mailrobot
 
 Usage
 =====

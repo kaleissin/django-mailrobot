@@ -46,6 +46,12 @@ collectstatic: virtual_env_set
 	-mkdir -p .$(LOCALPATH)/static
 	$(PYTHON_BIN)/django-admin.py collectstatic -c --noinput $(DJANGO_POSTFIX)
 
+runserver: virtual_env_set
+	$(PYTHON_BIN)/django-admin.py runserver $(DJANGO_POSTFIX)
+
+syncdb: virtual_env_set
+	$(PYTHON_BIN)/django-admin.py syncdb $(DJANGO_POSTFIX)
+
 cmd: virtual_env_set
 	$(PYTHON_BIN)/django-admin.py $(CMD) $(DJANGO_POSTFIX)
 
@@ -95,6 +101,11 @@ pip: requirements/$(SETTINGS).txt virtual_env_set
 virtualenv:
 	virtualenv --no-site-packages $(VIRTUAL_ENV)
 	echo $(VIRTUAL_ENV)
+
+load_demo_fixtures:
+	$(PYTHON_BIN)/django-admin.py loaddata src/mailrobot/fixtures/example.json $(DJANGO_POSTFIX)
+
+demo: virtual_env_set pip syncdb load_demo_fixtures runserver
 
 all: collectstatic refresh
 
