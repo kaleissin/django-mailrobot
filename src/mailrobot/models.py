@@ -110,12 +110,15 @@ class Mail(AbstractNamedModel):
     def body(self):
         return self.content.body
 
-    def make_content(self, context=None):
-        body = _render_from_string(self.content.body, context)
+    def attach_signature(self, context=None):
         if self.signature:
             signature = _render_from_string(self.signature.sig, context)
-            return "%s\n\n\n-- \n%s" % (body, signature)
-        return body
+            return u'\n\n\n-- \n%s' % signature
+        return u''
+
+    def make_content(self, context=None):
+        body = _render_from_string(self.content.body, context)
+        return body + self.attach_signature()
 
     def make_subject(self, context=None):
         return _render_from_string(self.content.subject, context)
