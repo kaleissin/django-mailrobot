@@ -1,1 +1,1 @@
-Django==1.5.5
+-r requirements/demo.txt
