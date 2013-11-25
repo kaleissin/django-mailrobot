@@ -128,6 +128,14 @@ class Mail(AbstractNamedModel):
             return unicode(self.reply_to)
         return reply_to
 
+    def get_sender(self, sender=None):
+        if not sender:
+            if self.sender:
+                return unicode(self.sender)
+        else:
+            return sender
+        raise ValueError, "Mail must have a sender"
+
     def _get_addresses(self, attribute, additional=(), required=False):
         """Merge the addresses of field <attribute> with list in <additional>"""
 
@@ -152,8 +160,7 @@ class Mail(AbstractNamedModel):
     def make_message(self, sender=None, recipients=(), ccs=(), bccs=(), reply_to=None, headers=None, context=None):
         if not headers:
             headers = {}
-        if not sender:
-            sender = self.sender.address
+        sender = self.get_sender(sender)
         reply_to = self.get_reply_to(reply_to)
         recipients = self.get_recipients(recipients)
         ccs = self.get_ccs(ccs)
