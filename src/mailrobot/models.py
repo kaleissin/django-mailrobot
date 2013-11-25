@@ -12,6 +12,15 @@ def _render_from_string(templatestring, context=None):
     template = Template(templatestring)
     return template.render(Context(context))
 
+class MailrobotError(ValueError):
+    pass
+
+class MailrobotNoSenderError(MailrobotError):
+    pass
+
+class MailrobotNoRecipientsError(MailrobotError):
+    pass
+
 class NameManager(models.Manager):
     def get_by_natural_key(self, name):
         return self.get(name=name)
@@ -168,7 +177,7 @@ class Mail(AbstractNamedModel):
                 return unicode(self.sender)
         else:
             return sender
-        raise ValueError, "Mail must have a sender"
+        raise MailrobotNoSenderError, "Mail must have a sender"
 
     def _get_addresses(self, attribute, additional=(), required=False):
         "Merge the addresses of field <attribute> with list in <additional>"
@@ -179,17 +188,40 @@ class Mail(AbstractNamedModel):
             addresses = set([unicode(row) for row in attribute.all()])
             addresses = addresses | set(additional)
         if required and not addresses:
-            raise ValueError, 'No addresses!'
+            raise MailrobotNoRecipientsError, 'No recipient addresses!'
         return addresses
 
-    def get_recipients(self, additional=()):
-        return self._get_addresses('recipients', additional, required=True)
+    def get_recipients(self, additional=(), required=True):
+        """Get recipients for To: and ensures there is at least one.
+
+        Email lacking anything in To: is likely spam."""
+
+        return self._get_addresses('recipients', additional, required)
 
     def get_ccs(self, additional=()):
+        """Get recipients for CC:
+
+        May be empty."""
+
         return self._get_addresses('ccs', additional)
 
     def get_bccs(self, additional=()):
+        """Get recipients for BCC:
+
+        May be empty."""
+
         return self._get_addresses('bccs', additional)
+
+    def validate_addresses(self, sender=None, recipients=(), ccs=(), bccs=()):
+        sender = self.get_sender(sender)
+        recipients = self.get_recipients(recipients, required=False)
+        ccs = self.get_ccs(ccs)
+        bccs = self.get_bccs(bccs)
+        if not sender:
+            raise MailrobotNoSenderError, "Invalid Email: Lacks sender"
+        if not (recipients | ccs | bccs):
+            raise MailrobotNoRecipientsError, "Invalid Email: Has no recipients"
+        return True
 
     def make_message(self, sender=None, recipients=(), ccs=(), bccs=(), reply_to=None, headers=None, context=None):
         """Generate a django.core.mail.EmailMessage
@@ -207,6 +239,8 @@ class Mail(AbstractNamedModel):
         recipients = self.get_recipients(recipients)
         ccs = self.get_ccs(ccs)
         bccs = self.get_bccs(bccs)
+
+        sendable = self.validate_addresses(sender, recipients, ccs, bccs)
 
         if reply_to:
             headers['Reply-To'] = reply_to
