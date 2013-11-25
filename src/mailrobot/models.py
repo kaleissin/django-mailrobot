@@ -123,10 +123,10 @@ class Mail(AbstractNamedModel):
     def make_subject(self, context=None):
         return _render_from_string(self.content.subject, context)
 
-    def get_reply_to(self):
-        if self.reply_to:
-            return self.reply_to.address
-        return u''
+    def get_reply_to(self, reply_to=u''):
+        if not reply_to and self.reply_to:
+            return unicode(self.reply_to)
+        return reply_to
 
     def _get_addresses(self, attribute, additional=(), required=False):
         """Merge the addresses of field <attribute> with list in <additional>"""
@@ -149,18 +149,18 @@ class Mail(AbstractNamedModel):
     def get_bccs(self, additional=()):
         return self._get_addresses('bccs', additional)
 
-    def make_message(self, sender=None, recipients=(), ccs=(), bccs=(), reply_to=None, context=None):
+    def make_message(self, sender=None, recipients=(), ccs=(), bccs=(), reply_to=None, headers=None, context=None):
+        if not headers:
+            headers = {}
         if not sender:
             sender = self.sender.address
-        if not reply_to:
-            reply_to = self.get_reply_to()
+        reply_to = self.get_reply_to(reply_to)
         recipients = self.get_recipients(recipients)
         ccs = self.get_ccs(ccs)
         bccs = self.get_bccs(bccs)
 
-        headers = {
-            'Reply-To': reply_to,
-        }
+        if reply_to:
+            headers['Reply-To'] = reply_to
 
         subject = self.make_subject(context)
         content = self.make_content(context)
