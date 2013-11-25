@@ -98,7 +98,7 @@ class Signature(AbstractNamedModel):
 class MailBody(AbstractNamedModel):
     "Subject and bodytext of the email"
 
-    subject = models.CharField(max_length=66, unique=True)
+    subject = models.CharField(max_length=66)
     body = models.TextField()
 
     class Meta:
