@@ -28,6 +28,15 @@ class AbstractNamedModel(models.Model):
     def natural_key(self):
         return self.name
 
+    def clone(self):
+        "Clone and return a Named model"
+
+        newself = deepcopy(self)
+        newself.pk = None
+        newself.name = '%s-%.0f' % (self.name, time.time())
+        newself.save(force_insert=True)
+        return newself
+
 class AddressManager(models.Manager):
     def get_by_natural_key(self, address):
         return self.get(address=address)
@@ -83,10 +92,11 @@ class Mail(AbstractNamedModel):
         return self.subject
 
     def clone(self):
-        newself = deepcopy(self)
-        newself.pk = None
-        newself.name = '%s-%.0f' % (self.name, time.time())
-        newself.save(force_insert=True)
+        """Clone and return a Mail
+
+        Use this to send the same MailBody to several sets of recipients.
+        """
+        newself = super(Mail, self).clone()
         newself.recipients = self.recipients.all()
         newself.ccs = self.ccs.all()
         newself.bccs = self.bccs.all()
