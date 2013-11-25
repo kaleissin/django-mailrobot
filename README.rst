@@ -10,39 +10,38 @@ spread all throughout your code? Hardcode no more! Use mailrobot instead.
 Installation
 ============
 
-Install library, for instance with pip:
+1. Install library, for instance with pip::
 
     pip install django-mailrobot
 
-Add library to your INSTALLED_APPS in your settings:
+2. Add library to your INSTALLED_APPS in your settings::
 
     INSTALLED_APPS += ['mailrobot']
 
-Add the tables.
+3. Add the tables.
 
-Prior to django 1.7:
+   Prior to django 1.7::
 
-    $ ./manage.py syncdb
+        $ ./manage.py syncdb
 
-After django 1.7:
+   With South::
 
-    $ ./manage.py migrate mailrobot
-
-With South:
-
-    $ ./manage.py schemamigration --initial mailrobot
-    $ ./manage.py migrate mailrobot
+        $ ./manage.py schemamigration --initial mailrobot
+        $ ./manage.py migrate mailrobot
 
 Usage
 =====
 
 Add mails and addresses through the django admin.
 
-Fetch a mail-template:
+In code
+-------
+
+Fetch a mail-template::
 
     template = Mail.objects.get(name='hello-world').
 
-Fill it:
+Fill it::
 
     mail = template.make_template(
         sender='Yep <overridden-from@example.com'>,
@@ -50,11 +49,11 @@ Fill it:
         context={'world': 'Mailrobot'}
     )
 
-Have a look:
+Have a look::
 
     print mail.message
 
-Send it:
+Send it::
 
     mail.send()
 
@@ -62,8 +61,12 @@ Niceties
 ========
 
 In case you need to send an email somewhere else for
-testing/debugging, clone an existing email in the admin: Select
-it, choose "Clone selected mails" in the action list, hit "Go".
+testing/debugging, clone an existing email in the admin:
+
+1. Select it
+2. Choose "Clone selected mails" in the action list
+3. Hit "Go"
+
 The clone will share everything with its original except the name,
 which will be suffixed with a timestamp.
 
