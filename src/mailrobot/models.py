@@ -78,6 +78,23 @@ class Signature(AbstractNamedModel):
     def __unicode__(self):
         return self.name
 
+    def attach(self, context=None):
+        """
+        Signature is attached so:
+
+        ::
+
+                the final line of content
+
+
+                --
+                signature
+
+        """
+
+        signature = _render_from_string(self.sig, context)
+        return u'\n\n\n-- \n%s' % signature
+
 class MailBody(AbstractNamedModel):
     "Subject and bodytext of the email"
 
@@ -133,22 +150,10 @@ class Mail(AbstractNamedModel):
         return self.content.body
 
     def attach_signature(self, context=None):
-        """
-        Signature is attached so:
-
-        ::
-
-                the final line of content
-
-
-                --
-                signature
-
-        """
+        "Attach signature, if any"
 
         if self.signature:
-            signature = _render_from_string(self.signature.sig, context)
-            return u'\n\n\n-- \n%s' % signature
+            return self.signature.attach(context)
         return u''
 
     def make_content(self, context=None):
