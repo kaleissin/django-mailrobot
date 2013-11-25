@@ -1,4 +1,14 @@
-# Django settings for mailer project.
+# Django settings for mailer: mailrobot example project.
+
+from os.path import abspath, dirname
+
+import django
+
+# Absolute filesystem path to the Django project directory:
+DJANGO_ROOT = dirname(dirname(abspath(__file__)))
+
+# Absolute filesystem path to the top-level project folder:
+SITE_ROOT = dirname(DJANGO_ROOT)
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
