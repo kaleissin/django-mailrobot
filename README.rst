@@ -43,7 +43,7 @@ Fetch a mail-template::
 
 Fill it::
 
-    mail = template.make_template(
+    mail = template.make_message(
         sender='Yep <overridden-from@example.com'>,
         recipients=('extra1@example.com', u'Blåbærsyltetøy <extra2@example.com>'),
         context={'world': 'Mailrobot'}
