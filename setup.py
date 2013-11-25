@@ -10,7 +10,7 @@ finally:
     README_FILE.close()
 
 setup(name='django-mailrobot',
-        version='0.1',
+        version='0.2',
         packages=['mailrobot'],
         package_dir = {'': 'src',},
         include_package_data=True,
