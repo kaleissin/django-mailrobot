@@ -16,6 +16,8 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   installation.rst
+   usage.rst
    models.rst
 
 
