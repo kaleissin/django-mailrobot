@@ -35,6 +35,9 @@ class AbstractNamedModel(models.Model):
     class Meta:
         abstract = True
 
+    def __unicode__(self):
+        return self.name
+
     def natural_key(self):
         return self.name
 
@@ -76,9 +79,6 @@ class Signature(AbstractNamedModel):
 
     sig = models.TextField()
 
-    def __unicode__(self):
-        return self.name
-
     def attach(self, context=None):
         """
         Signature is attached so::
@@ -105,9 +105,6 @@ class MailBody(AbstractNamedModel):
     class Meta:
         verbose_name_plural = 'mailbodies'
 
-    def __unicode__(self):
-        return self.subject
-
 class Mail(AbstractNamedModel):
     """Canned Mail with default sender, Reply-To and recipients
 
@@ -126,9 +123,6 @@ class Mail(AbstractNamedModel):
     ccs = models.ManyToManyField(Address, related_name='cc', **KEYFIELD_DEFAULTS)
     bccs = models.ManyToManyField(Address, related_name='bcc', **KEYFIELD_DEFAULTS)
     reply_to = models.ForeignKey(Address, related_name='reply_to', **KEYFIELD_DEFAULTS)
-
-    def __unicode__(self):
-        return self.subject
 
     def clone(self):
         """Clone and return a Mail
