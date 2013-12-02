@@ -80,14 +80,15 @@ class Signature(AbstractNamedModel):
 
     def attach(self, context=None):
         """
-        Signature is attached so::
+        The signature is attached like so:
+
+        ::
 
                 the final line of content
 
 
                 --
                 signature
-
         """
 
         signature = _render_from_string(self.sig, context)
