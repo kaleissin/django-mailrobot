@@ -217,6 +217,7 @@ class Mail(AbstractNamedModel):
         return self._get_addresses('bccs', additional)
 
     def validate_addresses(self, sender=None, recipients=(), ccs=(), bccs=()):
+        """Validates that there is one sender and at least one recipient"""
         sender = self.get_sender(sender)
         recipients = self.get_recipients(recipients, required=False)
         ccs = self.get_ccs(ccs)
