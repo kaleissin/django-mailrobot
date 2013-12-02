@@ -5,7 +5,6 @@ import warnings
 from django.db import models
 from django.template import Context, Template
 from django.core.mail import EmailMessage
-from django.utils.text import slugify
 
 def _render_from_string(templatestring, context=None):
     if context is None:
@@ -177,7 +176,7 @@ class Mail(AbstractNamedModel):
                 return unicode(self.sender)
         else:
             return sender
-        raise MailrobotNoSenderError, "Mail must have a sender"
+        raise MailrobotNoSenderError("Mail must have a sender")
 
     def _get_addresses(self, attribute, additional=(), required=False):
         "Merge the addresses of field <attribute> with list in <additional>"
@@ -188,7 +187,7 @@ class Mail(AbstractNamedModel):
             addresses = set([unicode(row) for row in attribute.all()])
             addresses = addresses | set(additional)
         if required and not addresses:
-            raise MailrobotNoRecipientsError, 'No recipient addresses!'
+            raise MailrobotNoRecipientsError('No recipient addresses!')
         return addresses
 
     def get_recipients(self, additional=(), required=True):
@@ -199,7 +198,7 @@ class Mail(AbstractNamedModel):
         try:
             return self._get_addresses('recipients', additional, required)
         except MailrobotNoRecipientsError as e:
-            warnings.warn('Beware: %s An empty "To:" looks spammy' % e.message)
+            warnings.warn('Beware: %s An empty "To:" looks spammy' % e.args[0])
             return self._get_addresses('recipients', additional, required=False)
 
     def get_ccs(self, additional=()):
