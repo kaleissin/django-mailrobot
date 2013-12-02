@@ -18,6 +18,7 @@ Contents:
 
    installation.rst
    usage.rst
+   testing.rst
    models.rst
 
 
