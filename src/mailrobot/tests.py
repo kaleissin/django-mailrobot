@@ -1,7 +1,7 @@
-from django.test import SimpleTestCase, TestCase
+from django.test import TestCase
 
-from .models import Mail, MailBody, Signature, Address
-from .models import MailrobotError, MailrobotNoSenderError, MailrobotNoRecipientsError
+from mailrobot.models import Mail, MailBody, Signature, Address
+from mailrobot.models import MailrobotError, MailrobotNoSenderError, MailrobotNoRecipientsError
 
 
 HELLO_WORLD_BODY_TEMPLATE = """Hello, {{ world|default:"World" }}!
@@ -78,7 +78,7 @@ class MailTest(TestCase):
     def test_valid(self):
         self.mail.sender = self.address
         self.mail.save()
-        self.mail.make_message(recipients=(self.address,))
+        self.mail.validate_addresses(recipients=(self.address,))
 
 class SignatureTest(TestCase):
 
