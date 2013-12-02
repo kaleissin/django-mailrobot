@@ -1,5 +1,6 @@
 import time
 from copy import deepcopy
+import warnings
 
 from django.db import models
 from django.template import Context, Template
@@ -201,7 +202,11 @@ class Mail(AbstractNamedModel):
 
         Email lacking anything in To: is likely spam."""
 
-        return self._get_addresses('recipients', additional, required)
+        try:
+            return self._get_addresses('recipients', additional, required)
+        except MailrobotNoRecipientsError as e:
+            warnings.warn('Beware: %s An empty "To:" looks spammy' % e.message)
+            return self._get_addresses('recipients', additional, required=False)
 
     def get_ccs(self, additional=()):
         """Get recipients for CC:
