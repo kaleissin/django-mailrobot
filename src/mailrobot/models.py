@@ -1,7 +1,11 @@
+from __future__ import unicode_literals
+
 import time
 from copy import deepcopy
 import warnings
 
+from django.utils.encoding import python_2_unicode_compatible
+from django.utils.six import text_type
 from django.db import models
 from django.template import Context, Template
 from django.core.mail import EmailMessage
@@ -25,6 +29,7 @@ class NameManager(models.Manager):
     def get_by_natural_key(self, name):
         return self.get(name=name)
 
+@python_2_unicode_compatible
 class AbstractNamedModel(models.Model):
     NAME_MAX_LENGTH = 40
     name = models.SlugField(max_length=NAME_MAX_LENGTH, unique=True)
@@ -34,7 +39,7 @@ class AbstractNamedModel(models.Model):
     class Meta:
         abstract = True
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def natural_key(self):
@@ -53,6 +58,7 @@ class AddressManager(models.Manager):
     def get_by_natural_key(self, address):
         return self.get(address=address)
 
+@python_2_unicode_compatible
 class Address(models.Model):
     address = models.EmailField(unique=True)
     comment = models.CharField(max_length=66, blank=True, null=True)
@@ -62,9 +68,9 @@ class Address(models.Model):
     class Meta:
         verbose_name_plural = 'addresses'
 
-    def __unicode__(self):
+    def __str__(self):
         if self.comment:
-            return u'%s <%s>' % (self.comment, self.address)
+            return '%s <%s>' % (self.comment, self.address)
         return self.address
 
     def natural_key(self):
@@ -93,8 +99,8 @@ class Signature(AbstractNamedModel):
 
         signature = _render_from_string(self.sig, context)
         if signature:
-            return u'\r\n\r\n\r\n-- \r\n%s' % signature
-        return u''
+            return '\r\n\r\n\r\n-- \r\n%s' % signature
+        return ''
 
 class MailBody(AbstractNamedModel):
     "Subject and bodytext of the email"
@@ -149,7 +155,7 @@ class Mail(AbstractNamedModel):
 
         if self.signature:
             return self.signature.attach(context)
-        return u''
+        return ''
 
     def make_content(self, context=None):
         "Generate the content (body + signature) from django templates and context"
@@ -162,11 +168,11 @@ class Mail(AbstractNamedModel):
 
         return _render_from_string(self.content.subject, context)
 
-    def get_reply_to(self, reply_to=u''):
+    def get_reply_to(self, reply_to=''):
         "Reply-To may be empty"
 
         if not reply_to and self.reply_to:
-            return unicode(self.reply_to)
+            return text_type(self.reply_to)
         return reply_to
 
     def get_sender(self, sender=None):
@@ -174,7 +180,7 @@ class Mail(AbstractNamedModel):
 
         if not sender:
             if self.sender:
-                return unicode(self.sender)
+                return text_type(self.sender)
         else:
             return sender
         raise MailrobotNoSenderError("Mail must have a sender")
@@ -185,7 +191,7 @@ class Mail(AbstractNamedModel):
         attribute = getattr(self, attribute)
         addresses = ()
         if attribute:
-            addresses = set([unicode(row) for row in attribute.all()])
+            addresses = set([text_type(row) for row in attribute.all()])
             addresses = addresses | set(additional)
         if required and not addresses:
             raise MailrobotNoRecipientsError('No recipient addresses!')
@@ -223,9 +229,9 @@ class Mail(AbstractNamedModel):
         ccs = self.get_ccs(ccs)
         bccs = self.get_bccs(bccs)
         if not sender:
-            raise MailrobotNoSenderError, "Invalid Email: Lacks sender"
+            raise MailrobotNoSenderError("Invalid Email: Lacks sender")
         if not (recipients | ccs | bccs):
-            raise MailrobotNoRecipientsError, "Invalid Email: Has no recipients"
+            raise MailrobotNoRecipientsError("Invalid Email: Has no recipients")
         return True
 
     def make_message(self, sender=None, recipients=(), ccs=(), bccs=(), reply_to=None, headers=None, context=None):

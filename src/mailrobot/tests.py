@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from django.test import TestCase
 
 from mailrobot.models import Mail, MailBody, Signature, Address
@@ -46,9 +48,9 @@ class MailTest(TestCase):
         )
         self.mailbody.save()
 
-        self.empty_sig = Signature(name='empty', sig=u'').save()
-        self.simple_sig = Signature(name='simple', sig=u'simple').save()
-        self.complex_sig = Signature(name='complex', sig=u'{{ complex }}').save()
+        self.empty_sig = Signature(name='empty', sig='').save()
+        self.simple_sig = Signature(name='simple', sig='simple').save()
+        self.complex_sig = Signature(name='complex', sig='{{ complex }}').save()
         
         self.mail = Mail(
             content=self.mailbody,
@@ -60,8 +62,8 @@ class MailTest(TestCase):
         self.address.save()
 
     def test_no_signature(self):
-        expected_result = u''
-        self.assertEqual(u'', self.mail.attach_signature())
+        expected_result = ''
+        self.assertEqual('', self.mail.attach_signature())
 
     def test_no_sender_no_recipients(self):
         with self.assertRaises(MailrobotError):
@@ -82,12 +84,12 @@ class MailTest(TestCase):
 
 class SignatureTest(TestCase):
 
-    SIG_TEMPLATE = u'\r\n\r\n\r\n-- \r\n%s'
+    SIG_TEMPLATE = '\r\n\r\n\r\n-- \r\n%s'
 
     def test_empty_signature(self):
-        sig = Signature(name='test1', sig=u'')
+        sig = Signature(name='test1', sig='')
         sig.save()
-        expected_result = u''
+        expected_result = ''
         self.assertEqual(expected_result, sig.attach())
 
     def test_simple_signature(self):
