@@ -74,6 +74,7 @@ clean:
 	-rm -rf build
 	-rm -rf dist
 	-rm -rf src/*.egg-info
+	-rm -rf docs/_build
 
 test: clean
 	django-admin.py test $(APP) $(DJANGO_TEST_POSTFIX)
