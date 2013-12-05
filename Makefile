@@ -76,7 +76,7 @@ clean:
 	-rm -rf src/*.egg-info
 
 test: clean
-	django-admin.py test $(APP) --settings=$(DJANGO_TEST_SETTINGS_MODULE)
+	django-admin.py test $(APP) $(DJANGO_TEST_POSTFIX)
 
 coverage: virtual_env_set
 	$(PYTHON_BIN)/coverage run $(PYTHON_BIN)/django-admin.py test $(APP) $(DJANGO_TEST_POSTFIX)
