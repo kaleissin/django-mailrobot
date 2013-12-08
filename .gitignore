@@ -1,3 +1,4 @@
+*.pyc
 build
 dist
 src/django_mailrobot.egg-info
