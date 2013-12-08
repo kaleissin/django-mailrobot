@@ -77,7 +77,7 @@ clean:
 	-rm -rf docs/_build
 
 test: clean
-	django-admin.py test $(APP) $(DJANGO_TEST_POSTFIX)
+	python runtests.py
 
 coverage: virtual_env_set
 	$(PYTHON_BIN)/coverage run $(PYTHON_BIN)/django-admin.py test $(APP) $(DJANGO_TEST_POSTFIX)
