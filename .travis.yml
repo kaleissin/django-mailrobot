@@ -9,5 +9,5 @@ install:
 script:
   - python runtests.py
 env:
-  - DJANGO=Django>=1.5,<1.6
-  - DJANGO=Django==1.6
+  - DJANGO="Django>=1.5,<1.6"
+  - DJANGO="Django==1.6"
