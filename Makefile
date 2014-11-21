@@ -105,7 +105,7 @@ virtualenv:
 	echo $(VIRTUAL_ENV)
 
 load_demo_fixtures:
-	$(PYTHON_BIN)/django-admin.py loaddata src/mailrobot/fixtures/example.json $(DJANGO_POSTFIX)
+	$(PYTHON_BIN)/django-admin.py loaddata src/${PROJECT}/fixtures/example.json $(DJANGO_POSTFIX)
 
 demo: virtual_env_set pip syncdb load_demo_fixtures runserver
 
