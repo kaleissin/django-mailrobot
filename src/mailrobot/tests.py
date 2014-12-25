@@ -21,12 +21,21 @@ class CloneTest(TestCase):
         self.mail.save()
         self.address = Address(address='postmaster@example.com')
         self.address.save()
+        self.name_max_length = MailBody.NAME_MAX_LENGTH
 
     def test_default_clone(self):
         model = self.mailbody
         clone = model.clone()
         self.assertNotEqual(model, clone)
         self.assertTrue(clone.name.startswith(model.name))
+
+    def test_cloned_long_name(self):
+        longname = 'x' * MailBody.NAME_MAX_LENGTH
+        model = self.mailbody
+        model.name = longname
+        clone = model.clone()
+        self.assertNotEqual(model, clone)
+        self.assertLessEqual(len(clone.name), MailBody.NAME_MAX_LENGTH)
 
     def test_mail_clone(self):
         model = self.mail

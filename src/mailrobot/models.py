@@ -45,12 +45,18 @@ class AbstractNamedModel(models.Model):
     def natural_key(self):
         return self.name
 
+    def get_suffixed_name(self, name, suffix):
+        "Return a name shorter than NAME_MAX_LENGTH, with -<suffix> at the end"
+        suffix = ''.join((list(reversed('%s' % suffix))))
+        suffixedname = '%s-%s' % (name, suffix)
+        return suffixedname[:self.NAME_MAX_LENGTH]
+
     def clone(self):
         "Clone and return a Named model"
 
         newself = deepcopy(self)
         newself.pk = None
-        newself.name = '%s-%.0f' % (self.name, time.time())
+        newself.name = self.get_suffixed_name(self.name, int(time.time()))
         newself.save(force_insert=True)
         return newself
 
