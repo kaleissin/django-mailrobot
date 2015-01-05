@@ -3,6 +3,8 @@
 from distutils.core import setup
 from setuptools import find_packages
 
+import mailrobot
+
 README_FILE = open('README.rst')
 try:
     long_description = README_FILE.read()
@@ -10,7 +12,7 @@ finally:
     README_FILE.close()
 
 setup(name='django-mailrobot',
-        version='0.3.2',
+        version=mailrobot.__version__,
         packages=['mailrobot'],
         package_dir = {'': 'src',},
         include_package_data=True,
