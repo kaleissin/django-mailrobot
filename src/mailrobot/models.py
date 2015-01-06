@@ -48,7 +48,7 @@ class AbstractNamedModel(models.Model):
     def get_suffixed_name(self, name, suffix):
         "Return a name shorter than NAME_MAX_LENGTH, with -<suffix> at the end"
         suffix = ''.join((list(reversed('%s' % suffix))))
-        suffixedname = '%s-%s' % (name, suffix)
+        suffixedname = '%s-%s' % (name[:-len(suffix)-1], suffix)
         return suffixedname[:self.NAME_MAX_LENGTH]
 
     def clone(self):
@@ -57,6 +57,7 @@ class AbstractNamedModel(models.Model):
         newself = deepcopy(self)
         newself.pk = None
         newself.name = self.get_suffixed_name(self.name, int(time.time()))
+        assert newself.name != self.name, "Names are identical"
         newself.save(force_insert=True)
         return newself
 
