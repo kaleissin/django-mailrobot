@@ -153,5 +153,5 @@ testing/debugging, clone an existing email in the admin:
 The clone will share everything with its original except the name,
 which will be suffixed with a timestamp.
 
-Edit the name of the clone to what you need, change recipients,
-CCs, BCCs. Then, where you send the mail from, choose the clone if
+Edit the name of the clone to what you need, change recipients, CCs, BCCs.
+Then, where you send the mail from, choose the clone if ``DEBUG`` is ``True``.
