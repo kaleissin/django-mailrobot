@@ -50,7 +50,7 @@ runserver: virtual_env_set
 	$(PYTHON_BIN)/django-admin.py runserver $(DJANGO_POSTFIX)
 
 syncdb: virtual_env_set
-	$(PYTHON_BIN)/django-admin.py syncdb $(DJANGO_POSTFIX)
+	$(PYTHON_BIN)/django-admin.py syncdb --noinput $(DJANGO_POSTFIX)
 
 cmd: virtual_env_set
 	$(PYTHON_BIN)/django-admin.py $(CMD) $(DJANGO_POSTFIX)
@@ -105,7 +105,7 @@ virtualenv:
 	echo $(VIRTUAL_ENV)
 
 load_demo_fixtures:
-	$(PYTHON_BIN)/django-admin.py loaddata src/${PROJECT}/fixtures/example.json $(DJANGO_POSTFIX)
+	$(PYTHON_BIN)/django-admin.py loaddata src/mailer/fixtures/adminuser.json $(DJANGO_POSTFIX)
 
 demo: virtual_env_set pip syncdb load_demo_fixtures runserver
 
