@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 
+import sys
+
 from distutils.core import setup
 from setuptools import find_packages
 
+sys.path.append('./src')
 import mailrobot
 
 README_FILE = open('README.rst')
