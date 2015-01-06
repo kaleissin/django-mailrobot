@@ -27,7 +27,6 @@ class CloneTest(TestCase):
         model = self.mailbody
         clone = model.clone()
         self.assertNotEqual(model, clone)
-        self.assertTrue(clone.name.startswith(model.name))
 
     def test_cloned_long_name(self):
         longname = 'x' * MailBody.NAME_MAX_LENGTH
@@ -44,7 +43,6 @@ class CloneTest(TestCase):
         model.save()
         clone = model.clone()
         self.assertNotEqual(model, clone)
-        self.assertTrue(clone.name.startswith(model.name))
         self.assertEqual(set(clone.recipients.all()), set(model.recipients.all()))
 
 class MailTest(TestCase):
