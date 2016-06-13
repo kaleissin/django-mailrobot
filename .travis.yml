@@ -1,13 +1,15 @@
 language: python
 python:
   - "2.7"
-  - "3.3"
   - "3.4"
+  - "3.5"
+  - "nightly",
 install:
   - pip install -q $DJANGO --use-mirrors
   - python setup.py -q install
 script:
   - python runtests.py
 env:
-  - DJANGO="Django>=1.6,<1.7"
-  - DJANGO="Django>=1.7,<1.8"
+  - DJANGO="Django>=1.8,<1.9"
+  - DJANGO="Django>=1.9,<1.10"
+sudo: false
