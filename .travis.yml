@@ -5,7 +5,7 @@ python:
   - "3.5"
   - "nightly"
 install:
-  - pip install -q $DJANGO --use-mirrors
+  - pip install -q $DJANGO
   - python setup.py -q install
 script:
   - python runtests.py
