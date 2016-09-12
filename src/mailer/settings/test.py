@@ -17,3 +17,12 @@ INSTALLED_APPS=(
 # To shut up a warning in Django 1.7
 MIDDLEWARE_CLASSES=()
 
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': False,
+        'OPTIONS': {
+            'debug': DEBUG,
+        },
+    },
+]
