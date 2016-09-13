@@ -14,7 +14,8 @@ try:
 finally:
     README_FILE.close()
 
-setup(name='django-mailrobot',
+setup(
+        name='django-mailrobot',
         version=mailrobot.__version__,
         packages=['mailrobot'],
         package_dir = {'': 'src',},
@@ -33,7 +34,17 @@ setup(name='django-mailrobot',
                 'License :: OSI Approved :: MIT License',
                 'Operating System :: OS Independent',
                 'Programming Language :: Python',
+                'Programming Language :: Python :: 2',
+                'Programming Language :: Python :: 2.7',
+                'Programming Language :: Python :: 3',
+                'Programming Language :: Python :: 3.4',
+                'Programming Language :: Python :: 3.5',
+                'Topic :: Communications :: Email',
                 'Topic :: Software Development :: Libraries :: Application Frameworks',
                 'Topic :: Software Development :: Libraries :: Python Modules',
+                'Framework :: Django',
+                'Framework :: Django :: 1.8',
+                'Framework :: Django :: 1.9',
+                'Framework :: Django :: 1.10',
         ]
 )
