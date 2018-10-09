@@ -6,14 +6,14 @@ LOCALPATH := $(CURDIR)/src
 PYTHONPATH := $(LOCALPATH)/
 SETTINGS := demo
 DJANGO_SETTINGS_MODULE = $(PROJECT).settings.$(SETTINGS)
-DJANGO_POSTFIX := --settings=$(DJANGO_SETTINGS_MODULE) --pythonpath=.$(PYTHONPATH)
+DJANGO_POSTFIX := --settings $(DJANGO_SETTINGS_MODULE) --pythonpath .$(PYTHONPATH)
 LOCAL_SETTINGS := local
 DJANGO_LOCAL_SETTINGS_MODULE = $(PROJECT).settings.$(LOCAL_SETTINGS)
-DJANGO_LOCAL_POSTFIX := --settings=$(DJANGO_LOCAL_SETTINGS_MODULE) --pythonpath=$(PYTHONPATH)
+DJANGO_LOCAL_POSTFIX := --settings $(DJANGO_LOCAL_SETTINGS_MODULE) --pythonpath $(PYTHONPATH)
 TEST_SETTINGS := test
 DJANGO_TEST_SETTINGS_MODULE = $(PROJECT).settings.$(TEST_SETTINGS)
-DJANGO_POSTFIX := --settings=$(DJANGO_SETTINGS_MODULE) --pythonpath=$(PYTHONPATH)
-DJANGO_TEST_POSTFIX := --settings=$(DJANGO_TEST_SETTINGS_MODULE) --pythonpath=$(PYTHONPATH)
+DJANGO_POSTFIX := --settings $(DJANGO_SETTINGS_MODULE) --pythonpath $(PYTHONPATH)
+DJANGO_TEST_POSTFIX := --settings $(DJANGO_TEST_SETTINGS_MODULE) --pythonpath $(PYTHONPATH)
 PYTHON_BIN := $(VIRTUAL_ENV)/bin
 
 .PHONY: clean showenv coverage test bootstrap pip virtualenv sdist virtual_env_set
@@ -49,8 +49,8 @@ collectstatic: virtual_env_set
 runserver: virtual_env_set
 	$(PYTHON_BIN)/django-admin.py runserver $(DJANGO_POSTFIX)
 
-syncdb: virtual_env_set
-	$(PYTHON_BIN)/django-admin.py syncdb --noinput $(DJANGO_POSTFIX)
+migrate: virtual_env_set
+	$(PYTHON_BIN)/django-admin.py migrate --noinput $(DJANGO_POSTFIX)
 
 cmd: virtual_env_set
 	$(PYTHON_BIN)/django-admin.py $(CMD) $(DJANGO_POSTFIX)
@@ -68,6 +68,7 @@ compare:
 	rsync -avz --checksum --dry-run --exclude-from .gitignore --exclude-from .rsyncignore . ${REMOTE_URI}
 
 clean:
+	find . -name __pycache__ -print0 | xargs -0 rm -rf
 	find . -name "*.pyc" -print0 | xargs -0 rm -rf
 	-rm -rf htmlcov
 	-rm -rf .coverage
@@ -107,7 +108,7 @@ virtualenv:
 load_demo_fixtures:
 	$(PYTHON_BIN)/django-admin.py loaddata src/mailer/fixtures/adminuser.json $(DJANGO_POSTFIX)
 
-demo: virtual_env_set pip syncdb load_demo_fixtures runserver
+demo: virtual_env_set pip migrate load_demo_fixtures runserver
 
 all: collectstatic refresh
 

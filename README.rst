@@ -22,14 +22,9 @@ Installation
 
 3. Add the tables to the existing project.
 
-   Prior to django 1.7::
+   ::
 
-        $ ./manage.py syncdb
-
-   With South::
-
-        $ ./manage.py schemamigration --initial mailrobot
-        $ ./manage.py migrate mailrobot
+        $ ./manage.py migrate
 
 Demo
 ====
@@ -39,7 +34,7 @@ virtualenv, then provided you are on some Un*x::
 
     make demo
 
-This'll ask you to make an admin user. Do so.
+This'll create a demo-user "demo" with the password "demo".
 
 The demo should now be running on http://127.0.0.1/
 
