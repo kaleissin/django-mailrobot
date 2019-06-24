@@ -134,12 +134,12 @@ class Mail(AbstractNamedModel):
     }
 
     content = models.ForeignKey(MailBody, on_delete=models.CASCADE, related_name='mail')
-    signature = models.ForeignKey(Signature, related_name='mail', **KEYFIELD_DEFAULTS)
-    sender = models.ForeignKey(Address, related_name='sender', **KEYFIELD_DEFAULTS)
+    signature = models.ForeignKey(Signature, related_name='mail', on_delete=models.CASCADE, **KEYFIELD_DEFAULTS)
+    sender = models.ForeignKey(Address, related_name='sender', on_delete=models.CASCADE, **KEYFIELD_DEFAULTS)
     recipients = models.ManyToManyField(Address, related_name='recipients', **M2M_KEYFIELD_DEFAULTS)
     ccs = models.ManyToManyField(Address, related_name='cc', **M2M_KEYFIELD_DEFAULTS)
     bccs = models.ManyToManyField(Address, related_name='bcc', **M2M_KEYFIELD_DEFAULTS)
-    reply_to = models.ForeignKey(Address, related_name='reply_to', **KEYFIELD_DEFAULTS)
+    reply_to = models.ForeignKey(Address, related_name='reply_to', on_delete=models.CASCADE, **KEYFIELD_DEFAULTS)
 
     def clone(self):
         """Clone and return a Mail
@@ -148,9 +148,9 @@ class Mail(AbstractNamedModel):
         """
 
         newself = super(Mail, self).clone()
-        newself.recipients = self.recipients.all()
-        newself.ccs = self.ccs.all()
-        newself.bccs = self.bccs.all()
+        newself.recipients.set(self.recipients.all())
+        newself.ccs.set(self.ccs.all())
+        newself.bccs.set(self.bccs.all())
         return newself
 
     @property
