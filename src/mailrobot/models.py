@@ -133,13 +133,20 @@ class Mail(AbstractNamedModel):
         'blank': True,
     }
 
-    content = models.ForeignKey(MailBody, on_delete=models.CASCADE, related_name='mail')
-    signature = models.ForeignKey(Signature, related_name='mail', **KEYFIELD_DEFAULTS)
-    sender = models.ForeignKey(Address, related_name='sender', **KEYFIELD_DEFAULTS)
-    recipients = models.ManyToManyField(Address, related_name='recipients', **M2M_KEYFIELD_DEFAULTS)
-    ccs = models.ManyToManyField(Address, related_name='cc', **M2M_KEYFIELD_DEFAULTS)
-    bccs = models.ManyToManyField(Address, related_name='bcc', **M2M_KEYFIELD_DEFAULTS)
-    reply_to = models.ForeignKey(Address, related_name='reply_to', **KEYFIELD_DEFAULTS)
+    content = models.ForeignKey(MailBody, on_delete=models.CASCADE,
+                                related_name='mail')
+    signature = models.ForeignKey(Signature, on_delete=models.CASCADE,
+                                  related_name='mail', **KEYFIELD_DEFAULTS)
+    sender = models.ForeignKey(Address, on_delete=models.CASCADE,
+                               related_name='sender', **KEYFIELD_DEFAULTS)
+    recipients = models.ManyToManyField(Address, related_name='recipients',
+                                        **M2M_KEYFIELD_DEFAULTS)
+    ccs = models.ManyToManyField(Address, related_name='cc',
+                                 **M2M_KEYFIELD_DEFAULTS)
+    bccs = models.ManyToManyField(Address, related_name='bcc',
+                                  **M2M_KEYFIELD_DEFAULTS)
+    reply_to = models.ForeignKey(Address, on_delete=models.CASCADE,
+                                 related_name='reply_to', **KEYFIELD_DEFAULTS)
 
     def clone(self):
         """Clone and return a Mail
