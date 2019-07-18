@@ -155,9 +155,9 @@ class Mail(AbstractNamedModel):
         """
 
         newself = super(Mail, self).clone()
-        newself.recipients = self.recipients.all()
-        newself.ccs = self.ccs.all()
-        newself.bccs = self.bccs.all()
+        newself.recipients.set(self.recipients.all())
+        newself.ccs.set(self.ccs.all())
+        newself.bccs.set(self.bccs.all())
         return newself
 
     @property

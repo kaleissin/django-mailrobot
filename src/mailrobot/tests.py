@@ -39,7 +39,7 @@ class CloneTest(TestCase):
     def test_mail_clone(self):
         model = self.mail
         model.sender = self.address
-        model.recipients = [self.address]
+        model.recipients.set([self.address])
         model.save()
         clone = model.clone()
         self.assertNotEqual(model, clone)
