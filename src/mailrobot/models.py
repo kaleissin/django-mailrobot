@@ -4,8 +4,8 @@ import time
 from copy import deepcopy
 import warnings
 
-from django.utils.encoding import python_2_unicode_compatible
-from django.utils.six import text_type
+from six import python_2_unicode_compatible
+from six import text_type
 from django.db import models
 from django.template import Context, Template
 from django.core.mail import EmailMessage
