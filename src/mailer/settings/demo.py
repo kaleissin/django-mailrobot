@@ -8,3 +8,5 @@ DATABASES = {
 }
 
 SECRET_KEY = 'na2Tei0FoChe3ooloh5Yaec0ji7Aipho'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
