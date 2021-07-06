@@ -13,9 +13,6 @@ INSTALLED_APPS=(
     'mailrobot',
 )
 
-# To shut up a warning in Django 1.7
-MIDDLEWARE_CLASSES=()
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -25,3 +22,5 @@ TEMPLATES = [
         },
     },
 ]
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

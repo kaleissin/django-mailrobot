@@ -4,11 +4,10 @@ import time
 from copy import deepcopy
 import warnings
 
-from django.utils.encoding import python_2_unicode_compatible
-from django.utils.six import text_type
 from django.db import models
 from django.template import Context, Template
 from django.core.mail import EmailMessage
+
 
 def _render_from_string(templatestring, context=None):
     if context is None:
@@ -16,20 +15,24 @@ def _render_from_string(templatestring, context=None):
     template = Template(templatestring)
     return template.render(Context(context))
 
+
 class MailrobotError(ValueError):
     pass
+
 
 class MailrobotNoSenderError(MailrobotError):
     pass
 
+
 class MailrobotNoRecipientsError(MailrobotError):
     pass
+
 
 class NameManager(models.Manager):
     def get_by_natural_key(self, name):
         return self.get(name=name)
 
-@python_2_unicode_compatible
+
 class AbstractNamedModel(models.Model):
     NAME_MAX_LENGTH = 40
     name = models.SlugField(max_length=NAME_MAX_LENGTH, unique=True)
@@ -61,11 +64,12 @@ class AbstractNamedModel(models.Model):
         newself.save(force_insert=True)
         return newself
 
+
 class AddressManager(models.Manager):
     def get_by_natural_key(self, address):
         return self.get(address=address)
 
-@python_2_unicode_compatible
+
 class Address(models.Model):
     address = models.EmailField(unique=True)
     comment = models.CharField(max_length=66, blank=True, null=True)
@@ -82,6 +86,7 @@ class Address(models.Model):
 
     def natural_key(self):
         return self.address
+
 
 class Signature(AbstractNamedModel):
     """Email signature
@@ -109,6 +114,7 @@ class Signature(AbstractNamedModel):
             return '\r\n\r\n\r\n-- \r\n%s' % signature
         return ''
 
+
 class MailBody(AbstractNamedModel):
     "Subject and bodytext of the email"
 
@@ -117,6 +123,7 @@ class MailBody(AbstractNamedModel):
 
     class Meta:
         verbose_name_plural = 'mailbodies'
+
 
 class Mail(AbstractNamedModel):
     """Canned Mail with default sender, Reply-To and recipients
@@ -190,7 +197,7 @@ class Mail(AbstractNamedModel):
         "Reply-To may be empty"
 
         if not reply_to and self.reply_to:
-            return text_type(self.reply_to)
+            return str(self.reply_to)
         return reply_to
 
     def get_sender(self, sender=None):
@@ -198,7 +205,7 @@ class Mail(AbstractNamedModel):
 
         if not sender:
             if self.sender:
-                return text_type(self.sender)
+                return str(self.sender)
         else:
             return sender
         raise MailrobotNoSenderError("Mail must have a sender")
@@ -209,7 +216,7 @@ class Mail(AbstractNamedModel):
         attribute = getattr(self, attribute)
         addresses = ()
         if attribute:
-            addresses = set([text_type(row) for row in attribute.all()])
+            addresses = set([str(row) for row in attribute.all()])
             addresses = addresses | set(additional)
         if required and not addresses:
             raise MailrobotNoRecipientsError('No recipient addresses!')
