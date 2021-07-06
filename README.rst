@@ -49,6 +49,17 @@ then run the tests with::
 
     make test APP=mailrobot
 
+Development
+===========
+
+Install the dev-requirements with::
+
+    pip install -r requirements/test.txt
+
+This'll give you ipython for a prettier shell-experience, but more importantly
+it'll install pre-commit. Pre-commit will check for syntax errors and merge
+conflicts, and fix trailing whitespaces and mixed line-endings for you.
+
 Usage
 =====
 
@@ -94,4 +105,4 @@ Edit the name of the clone to what you need, change recipients,
 CCs, BCCs. Then, where you send the mail from, choose the clone if
 settings.DEBUG is True.
 
-:Version: 0.6.0
+:Version: 0.7.0
