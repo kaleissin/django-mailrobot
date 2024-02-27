@@ -1,0 +1,41 @@
+[
+{
+  "pk": 1,
+  "model": "mailrobot.address",
+  "fields": {
+    "comment": "Example address",
+    "address": "postmaster@example.com"
+  }
+},
+{
+  "pk": 1,
+  "model": "mailrobot.signature",
+  "fields": {
+    "sig": "HTH\r\nHAND",
+    "name": "hello-world"
+  }
+},
+{
+  "pk": 1,
+  "model": "mailrobot.mailbody",
+  "fields": {
+    "body": "Hello, {{ world|default:\"World\" }}!\r\n\r\nThis is a test of mail robot.",
+    "name": "hello-world",
+    "subject": "Hello, {{ world|default:\"World\" }}!"
+  }
+},
+{
+  "pk": 1,
+  "model": "mailrobot.mail",
+  "fields": {
+    "sender": 1,
+    "recipients": [],
+    "ccs": [],
+    "content": 1,
+    "bccs": [],
+    "signature": 1,
+    "reply_to": 1,
+    "name": "hello-world"
+  }
+}
+]

@@ -1,9 +1,12 @@
+.*
+!.bumpversion.cfg
+!.github
+!.gitignore
+!.pre-commit-config.yaml
 *.pyc
 *.sqlite3
+*.egg-info
 build
 dist
-src/django_mailrobot.egg-info
 docs/_build
-.coverage
 htmlcov
-.tox

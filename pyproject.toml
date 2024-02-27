@@ -1,0 +1,43 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "django-mailrobot"
+description = "Stores and sends canned email responses."
+authors = [{name = "kaleissin", email = "kaleissin@gmail.com"}]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Communications :: Email",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Framework :: Django",
+    "Framework :: Django :: 3.2",
+]
+requires-python = ">=3.8"
+dependencies = ["Django>=3.2,<5.1"]
+dynamic = ["version"]
+readme = "README.rst"
+
+[project.urls]
+Homepage = "https://github.com/kaleissin/django-mailrobot"
+
+[tool.hatch.build.targets.wheel]
+only-packages = true
+sources = ["src"]
+only-include = ["src/mailrobot"]
+
+[tool.hatch.version]
+path = "src/mailrobot/__init__.py"
