@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.8.1
+-----
+
+Stops importing ugettext_lazy, which was removed in Django 4.0. This is only
+used in the admin, but our additions to the admin has no tests.
+
+
 0.8.0
 -----
 
