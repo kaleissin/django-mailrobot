@@ -2,12 +2,16 @@
 django-mailrobot
 ================
 
+.. IMPORTANT:: This project is moth-balled, no further development will happen. Feel free to fork. For control of the package on PyPI try a PEP 541 Request @ PyPI support: https://github.com/pypi/support/issues/new?template=pep541-request.yml
+
+----
+
 Stores and sends canned email responses.
 
 Ever had to change the signature or add a recipient to N hardcoded emails
 spread all throughout your code? Hardcode no more! Use mailrobot instead.
 
-Depends on Django, with a version between 1.11 and 2.2, inclusive.
+Depends on Django, with a version between 3.2 and 4.2, inclusive.
 
 Installation
 ============
