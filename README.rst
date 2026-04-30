@@ -11,7 +11,7 @@ Stores and sends canned email responses.
 Ever had to change the signature or add a recipient to N hardcoded emails
 spread all throughout your code? Hardcode no more! Use mailrobot instead.
 
-Depends on Django, with a version between 3.2 and 4.2, inclusive.
+Depends on Django, with a version between 3.2 and 6.0, inclusive.
 
 Installation
 ============
