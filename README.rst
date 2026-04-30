@@ -109,4 +109,4 @@ Edit the name of the clone to what you need, change recipients,
 CCs, BCCs. Then, where you send the mail from, choose the clone if
 settings.DEBUG is True.
 
-:Version: 0.8.1
+:Version: 0.8.2
