@@ -2,8 +2,7 @@
 django-mailrobot
 ================
 
-.. IMPORTANT:: This project is moth-balled, no further development will happen. Feel free to fork. For control of the package on PyPI try a PEP 541 Request @ PyPI support: https://github.com/pypi/support/issues/new?template=pep541-request.yml
-
+.. IMPORTANT:: This project is moth-balled, no further development will happen *by me*. Feel free to fork. Control of the package on PyPI has been given to `Sigma 2 <https://www.sigma2.no/>`_.
 ----
 
 Stores and sends canned email responses.
